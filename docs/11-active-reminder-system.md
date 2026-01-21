@@ -27,6 +27,7 @@
 - La confirmacion crea un DoseLog asociado al CalendarEntry.
 - Si se omite o expira, el CalendarEntry queda marcado como no completado.
 - Un DoseLog no debe existir sin un CalendarEntry asociado en este flujo.
+- La asociacion se infiere de forma logica usando medicineId + scheduledTime.
 
 ## 6. Fallos y Casos Borde
 - Si el usuario confirma tarde, el registro debe conservar la hora real de toma.
