@@ -3,11 +3,9 @@ package com.bandaid.app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.bandaid.app.data.local.InMemoryMedicineRepository
 import com.bandaid.app.databinding.ActivityMainBinding
 import com.bandaid.app.ui.main.MainUiState
 import com.bandaid.app.ui.main.MainViewModel
-import com.bandaid.app.ui.main.MainViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,9 +17,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val repository = InMemoryMedicineRepository()
-        val factory = MainViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+        val container = (application as BandAidApplication).appContainer
+        viewModel = ViewModelProvider(
+            this,
+            container.mainViewModelFactory
+        )[MainViewModel::class.java]
 
         binding.buttonAddDemo.setOnClickListener {
             viewModel.addDemoMedicine(
