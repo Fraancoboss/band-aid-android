@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Band-AId</string>
+    <string name="status_loading">Preparando datos...</string>
+    <string name="status_empty">No hay medicamentos.</string>
+    <string name="status_content">Medicamentos: %1$d</string>
+    <string name="button_add_demo">Agregar ejemplo</string>
+    <string name="demo_medicine_name">Ejemplo de medicamento</string>
+    <string name="demo_medicine_dosage">1 tableta</string>
+    <string name="demo_medicine_instructions">Tomar con agua</string>
 </resources>
