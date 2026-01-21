@@ -19,11 +19,11 @@ class MainViewModel(
     }
 
     fun load() {
-        val items = medicineRepository.getAll()
+        val items = medicineRepository.getAll().filter { it.isActive }
         _uiState.value = if (items.isEmpty()) {
             MainUiState.Empty
         } else {
-            MainUiState.Content(items.size)
+            MainUiState.Content(items)
         }
     }
 

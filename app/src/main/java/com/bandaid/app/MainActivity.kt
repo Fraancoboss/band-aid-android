@@ -3,19 +3,26 @@ package com.bandaid.app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bandaid.app.databinding.ActivityMainBinding
 import com.bandaid.app.ui.main.MainUiState
 import com.bandaid.app.ui.main.MainViewModel
+import com.bandaid.app.ui.main.MedicineListAdapter
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var adapter: MedicineListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        adapter = MedicineListAdapter()
+        binding.recyclerMedicines.layoutManager = LinearLayoutManager(this)
+        binding.recyclerMedicines.adapter = adapter
 
         val container = (application as BandAidApplication).appContainer
         viewModel = ViewModelProvider(
@@ -37,10 +44,14 @@ class MainActivity : AppCompatActivity() {
                 is MainUiState.Empty -> getString(R.string.status_empty)
                 is MainUiState.Content -> getString(
                     R.string.status_content,
-                    state.medicineCount
+                    state.medicines.size
                 )
             }
             binding.textStatus.text = text
+            when (state) {
+                is MainUiState.Content -> adapter.submitList(state.medicines)
+                else -> adapter.submitList(emptyList())
+            }
         }
     }
 }
