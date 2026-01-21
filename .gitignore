@@ -1,0 +1,29 @@
+# Gradle
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local SDK config
+local.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Android tooling outputs
+captures/
+externalNativeBuild/
+.cxx/
+
+# Kotlin
+.kotlin/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
