@@ -4,6 +4,7 @@
 - El build se ejecuta de forma local mediante Gradle Wrapper.
 - El proyecto requiere el SDK de Android configurado para compilar.
 - El resultado esperado es un APK de depuracion o release segun el tipo de build.
+Estado actual (v0.1): con el SDK configurado, el build compila y se ejecuta localmente.
 
 ## 2. Builds de Desarrollo vs Release
 - Desarrollo: build de depuracion para validacion local y pruebas manuales.
@@ -16,9 +17,9 @@
 - Las validaciones actuales son manuales.
 
 ## 4. Validacion Manual y Pruebas de Usuario
-- Verificar flujo basico de recordatorios y registro de tomas.
-- Confirmar estados en calendario y consistencia de historicos.
-- Revisar la entrada de datos de medicaciones y ediciones basicas.
+- Verificar flujo basico de lista y detalle de medicaciones.
+- Confirmar registro manual de tomas y visualizacion read-only en detalle.
+- Confirmar que la vista de calendario pasivo muestra entries solo si existen.
 
 ## 5. Expectativas de Despliegue
 - Despliegue local en dispositivos durante desarrollo.

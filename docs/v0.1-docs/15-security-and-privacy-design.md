@@ -1,5 +1,7 @@
 # Diseno de Seguridad y Privacidad
 
+Estado actual (v0.1): aplicacion local-only sin servicios externos ni sincronizacion.
+
 ## 1. Clasificacion de Datos
 - Datos de salud personales: medicaciones, planes de dosis, registros de toma.
 - Datos sensibles de contexto: notas subjetivas diarias.

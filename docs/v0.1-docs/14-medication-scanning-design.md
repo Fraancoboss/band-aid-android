@@ -1,5 +1,7 @@
 # Diseno de Escaneo de Medicamentos
 
+Estado: diseno conceptual. No implementado en v0.1.
+
 ## 1. Proposito de la Funcion de Escaneo
 - Facilitar el ingreso de datos de medicamentos de manera asistida.
 - Reducir errores de digitacion mediante verificacion humana.

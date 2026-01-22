@@ -1,5 +1,7 @@
 # Sistema de Recordatorios Activos
 
+Estado: diseno conceptual. No implementado en v0.1.
+
 ## 1. Definicion de un Recordatorio Activo
 - Un recordatorio activo es un evento de dosis esperada que requiere confirmacion explicita del usuario.
 - Su objetivo es registrar si la dosis fue tomada o no tomada, no solo avisar.

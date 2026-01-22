@@ -1,5 +1,7 @@
 # Base de Conocimiento Local y Recomendaciones
 
+Estado: diseno conceptual. No implementado en v0.1.
+
 ## 1. Proposito de la Base de Conocimiento
 - Derivar observaciones y recomendaciones simples a partir de datos ya registrados.
 - Ayudar al usuario a identificar patrones de cumplimiento y habitos.

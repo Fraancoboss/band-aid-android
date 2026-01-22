@@ -17,3 +17,6 @@ Android Dependencies:
 - androidx.core:core-ktx: 1.12.0
 - androidx.appcompat:appcompat: 1.6.1
 - com.google.android.material:material: 1.11.0
+- androidx.lifecycle:lifecycle-viewmodel-ktx: 2.7.0
+- androidx.lifecycle:lifecycle-livedata-ktx: 2.7.0
+- androidx.recyclerview:recyclerview: 1.3.2

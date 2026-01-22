@@ -1,5 +1,7 @@
 # Diseno del Calendario Interactivo
 
+Estado: diseno conceptual. En v0.1 solo existe una vista pasiva que lista CalendarEntry si existen.
+
 ## 1. Proposito del Calendario
 - Proveer una vista por fecha de las dosis esperadas y su estado real.
 - Permitir al usuario revisar el cumplimiento diario de medicacion.

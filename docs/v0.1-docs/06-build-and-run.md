@@ -1,10 +1,10 @@
 # Build y Ejecucion
 
-Estado actual:
-- El comando .\gradlew assembleDebug falla por falta de configuracion del Android SDK.
+Estado actual (v0.1):
+- El build requiere SDK de Android configurado localmente.
 - Ejecutar desde una consola de Windows (cmd o PowerShell) en la raiz del proyecto.
 
-Despues de configurar el SDK:
+Con el SDK configurado:
 - Ejecutar el siguiente comando para compilar el APK debug:
 
 ```
