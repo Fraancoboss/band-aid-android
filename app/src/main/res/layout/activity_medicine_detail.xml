@@ -31,4 +31,34 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/buttonRegisterDose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/button_register_dose" />
+
+    <TextView
+        android:id="@+id/textDoseLogsEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/dose_logs_empty"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/layoutDoseLogs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical" />
+
+    <TextView
+        android:id="@+id/textFeedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/empty_text"
+        android:textSize="14sp" />
 </LinearLayout>

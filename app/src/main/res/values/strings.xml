@@ -13,4 +13,9 @@
     <string name="medicine_status_active">Activo</string>
     <string name="medicine_status_inactive">Inactivo</string>
     <string name="medicine_not_found">Medicamento no encontrado</string>
+    <string name="button_register_dose">Registrar toma</string>
+    <string name="dose_log_registered">Toma registrada.</string>
+    <string name="dose_logs_empty">No hay tomas registradas.</string>
+    <string name="dose_log_item_format">Toma: %1$s</string>
+    <string name="empty_text"></string>
 </resources>
