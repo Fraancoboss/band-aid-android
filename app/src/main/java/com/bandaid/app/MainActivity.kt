@@ -1,17 +1,19 @@
 /*
  * Responsibility:
  * - UI entry point showing app status and list of active medicines.
+ * - Redirects to user setup when no profile exists in memory.
  * - Delegates data access to ViewModel and in-memory repositories via AppContainer.
  * - Does NOT implement persistence, background work, or domain validation.
  * Layer: UI (Activity).
- * Scope: stable for v0.1.
+ * Scope: stable for v0.1.x.
  *
  * Responsabilidad:
  * - Punto de entrada de UI que muestra estado y lista de medicinas activas.
+ * - Redirige a setup de usuario cuando no hay perfil en memoria.
  * - Delega acceso a datos al ViewModel y repositorios in-memory via AppContainer.
  * - NO implementa persistencia, trabajo en segundo plano ni validacion de dominio.
  * Capa: UI (Activity).
- * Alcance: estable para v0.1.
+ * Alcance: estable para v0.1.x.
  */
 package com.bandaid.app
 
@@ -26,6 +28,8 @@ import com.bandaid.app.ui.medicine.MedicineDetailActivity
 import com.bandaid.app.ui.main.MainUiState
 import com.bandaid.app.ui.main.MainViewModel
 import com.bandaid.app.ui.main.MedicineListAdapter
+import com.bandaid.app.ui.search.MedicineSearchActivity
+import com.bandaid.app.ui.user.UserSetupActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +41,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val container = (application as BandAidApplication).appContainer
+        val profile = container.userProfileStore.getProfile()
+        if (profile == null) {
+            // WHY THIS DECISION:
+            // User setup is mandatory when no profile exists in memory.
+            //
+            // POR QUE ESTA DECISION:
+            // El setup es obligatorio cuando no existe perfil en memoria.
+            val intent = Intent(this, UserSetupActivity::class.java)
+            intent.putExtra(UserSetupActivity.EXTRA_INITIAL_SETUP, true)
+            startActivity(intent)
+            finish()
+            return
+        }
 
         // WHY THIS DECISION:
         // RecyclerView is used only for the medicines list; other screens are small lists.
@@ -56,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         //
         // POR QUE ESTA DECISION:
         // Los repositorios se obtienen del AppContainer para evitar instancias en Activities.
-        val container = (application as BandAidApplication).appContainer
         viewModel = ViewModelProvider(
             this,
             container.mainViewModelFactory
@@ -72,6 +90,17 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonOpenCalendar.setOnClickListener {
             val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.buttonSearchMedicine.setOnClickListener {
+            val intent = Intent(this, MedicineSearchActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.buttonSettings.setOnClickListener {
+            val intent = Intent(this, UserSetupActivity::class.java)
+            intent.putExtra(UserSetupActivity.EXTRA_INITIAL_SETUP, false)
             startActivity(intent)
         }
 

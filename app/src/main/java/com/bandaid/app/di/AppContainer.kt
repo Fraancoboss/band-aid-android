@@ -18,9 +18,13 @@ package com.bandaid.app.di
 import com.bandaid.app.data.local.InMemoryMedicineRepository
 import com.bandaid.app.data.local.InMemoryDoseLogRepository
 import com.bandaid.app.data.local.InMemoryCalendarEntryRepository
+import com.bandaid.app.data.local.InMemoryMedicineMetaStore
+import com.bandaid.app.data.local.InMemoryUserProfileStore
+import com.bandaid.app.data.local.InMemoryUserRepository
 import com.bandaid.app.domain.repository.CalendarEntryRepository
 import com.bandaid.app.domain.repository.DoseLogRepository
 import com.bandaid.app.domain.repository.MedicineRepository
+import com.bandaid.app.domain.repository.UserRepository
 import com.bandaid.app.ui.main.MainViewModelFactory
 
 class AppContainer {
@@ -32,6 +36,9 @@ class AppContainer {
     val medicineRepository: MedicineRepository = InMemoryMedicineRepository()
     val doseLogRepository: DoseLogRepository = InMemoryDoseLogRepository()
     val calendarEntryRepository: CalendarEntryRepository = InMemoryCalendarEntryRepository()
+    val userRepository: UserRepository = InMemoryUserRepository()
+    val userProfileStore: InMemoryUserProfileStore = InMemoryUserProfileStore()
+    val medicineMetaStore: InMemoryMedicineMetaStore = InMemoryMedicineMetaStore()
 
     // WHY THIS DECISION:
     // ViewModel factory is created here to avoid creating repositories inside Activities.

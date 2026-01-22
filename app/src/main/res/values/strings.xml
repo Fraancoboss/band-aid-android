@@ -31,4 +31,46 @@
     <string name="calendar_next_day">Dia siguiente</string>
     <string name="calendar_selected_date_format">Fecha: %1$s</string>
     <string name="calendar_selected_date_placeholder">Fecha: --</string>
+    <string name="button_settings">Configuracion</string>
+    <string name="button_search_medicine">Buscar medicamentos</string>
+    <string name="button_search_medicine_desc">Buscar medicamentos</string>
+    <string name="avatar_desc">Avatar</string>
+    <string name="user_setup_title">Configuracion de usuario</string>
+    <string name="user_setup_age">Edad</string>
+    <string name="user_setup_weight">Peso</string>
+    <string name="user_setup_height">Altura</string>
+    <string name="user_setup_sex">Sexo</string>
+    <string name="user_setup_diseases">Enfermedades (opcional)</string>
+    <string name="user_setup_save_continue">Guardar y continuar</string>
+    <string name="user_default_name">Usuario</string>
+    <string name="search_title">Busqueda de medicamentos</string>
+    <string name="search_label">Buscar</string>
+    <string name="search_hint">Nombre del medicamento</string>
+    <string name="search_empty">Sin resultados.</string>
+    <string name="search_stub_note">Busqueda local (stub)</string>
+    <string name="search_result_format">%1$s</string>
+    <string name="create_medicine_title">Crear medicamento</string>
+    <string name="create_medicine_name">Nombre</string>
+    <string name="create_medicine_name_label">Nombre</string>
+    <string name="create_medicine_dosage">Dosis</string>
+    <string name="create_medicine_dosage_label">Dosis</string>
+    <string name="create_medicine_instructions">Indicaciones</string>
+    <string name="create_medicine_instructions_label">Indicaciones</string>
+    <string name="create_medicine_save">Guardar medicamento</string>
+    <string name="create_medicine_prefill_note">Formulario pre-rellenado desde busqueda</string>
+    <string name="create_medicine_duration_label">Duracion del tratamiento</string>
+    <string name="create_medicine_duration_hint">Ej: 7 dias</string>
+    <string name="medicine_duration_format">Duracion del tratamiento: %1$s</string>
+    <string name="medicine_duration_unknown">No registrada</string>
+    <string name="user_setup_age_label">Edad</string>
+    <string name="user_setup_weight_label">Peso</string>
+    <string name="user_setup_height_label">Altura</string>
+    <string name="user_setup_sex_label">Sexo</string>
+    <string name="user_setup_sex_note">Campo descriptivo, no medico</string>
+    <string name="user_setup_diseases_label">Enfermedades</string>
+    <string-array name="user_sex_options">
+        <item>Hombre</item>
+        <item>Mujer</item>
+        <item>Assembly</item>
+    </string-array>
 </resources>

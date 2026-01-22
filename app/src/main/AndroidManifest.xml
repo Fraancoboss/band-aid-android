@@ -16,6 +16,9 @@
 
         <activity android:name=".ui.medicine.MedicineDetailActivity" />
         <activity android:name=".ui.calendar.CalendarActivity" />
+        <activity android:name=".ui.user.UserSetupActivity" />
+        <activity android:name=".ui.search.MedicineSearchActivity" />
+        <activity android:name=".ui.search.MedicineCreateActivity" />
 
     </application>
 </manifest>

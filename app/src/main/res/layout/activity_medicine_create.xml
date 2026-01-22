@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_medicine_title"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/textPrefillNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/create_medicine_prefill_note"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/labelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:labelFor="@id/inputName"
+        android:text="@string/create_medicine_name_label"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/inputName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/create_medicine_name"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/labelDosage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:labelFor="@id/inputDosage"
+        android:text="@string/create_medicine_dosage_label"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/inputDosage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/create_medicine_dosage"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/labelInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:labelFor="@id/inputInstructions"
+        android:text="@string/create_medicine_instructions_label"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/inputInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/create_medicine_instructions"
+        android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/labelDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:labelFor="@id/inputDuration"
+        android:text="@string/create_medicine_duration_label"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/inputDuration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/create_medicine_duration_hint"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/create_medicine_save" />
+</LinearLayout>

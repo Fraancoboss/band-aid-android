@@ -49,6 +49,9 @@ class MedicineDetailActivity : AppCompatActivity() {
     private val calendarEntryRepository: CalendarEntryRepository
         get() = (application as BandAidApplication).appContainer.calendarEntryRepository
 
+    private val medicineMetaStore
+        get() = (application as BandAidApplication).appContainer.medicineMetaStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMedicineDetailBinding.inflate(layoutInflater)
@@ -90,6 +93,16 @@ class MedicineDetailActivity : AppCompatActivity() {
         binding.textStatus.text = getString(
             R.string.medicine_status_format,
             statusText
+        )
+        // WHY THIS DECISION:
+        // Duration is UI-only metadata and is not used for calendar logic.
+        //
+        // POR QUE ESTA DECISION:
+        // La duracion es metadato UI y no se usa para logica del calendario.
+        val duration = medicineMetaStore.getDuration(medicineId)
+        binding.textDuration.text = getString(
+            R.string.medicine_duration_format,
+            duration ?: getString(R.string.medicine_duration_unknown)
         )
 
         renderDoseLogs()
