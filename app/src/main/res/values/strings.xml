@@ -9,4 +9,8 @@
     <string name="demo_medicine_instructions">Tomar con agua</string>
     <string name="medicine_dosage_format">Dosis: %1$s</string>
     <string name="medicine_instructions_format">Indicaciones: %1$s</string>
+    <string name="medicine_status_format">Estado: %1$s</string>
+    <string name="medicine_status_active">Activo</string>
+    <string name="medicine_status_inactive">Inactivo</string>
+    <string name="medicine_not_found">Medicamento no encontrado</string>
 </resources>

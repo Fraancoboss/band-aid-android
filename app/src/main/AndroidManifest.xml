@@ -14,5 +14,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.medicine.MedicineDetailActivity" />
+
     </application>
 </manifest>

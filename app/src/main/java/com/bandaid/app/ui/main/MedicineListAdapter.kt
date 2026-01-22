@@ -6,13 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bandaid.app.databinding.ItemMedicineBinding
 import com.bandaid.app.domain.model.Medicine
 
-class MedicineListAdapter : RecyclerView.Adapter<MedicineViewHolder>() {
+class MedicineListAdapter(
+    private val onItemClick: (Medicine) -> Unit
+) : RecyclerView.Adapter<MedicineViewHolder>() {
     private val items = mutableListOf<Medicine>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemMedicineBinding.inflate(inflater, parent, false)
-        return MedicineViewHolder(binding)
+        return MedicineViewHolder(binding, onItemClick)
     }
 
     override fun onBindViewHolder(holder: MedicineViewHolder, position: Int) {

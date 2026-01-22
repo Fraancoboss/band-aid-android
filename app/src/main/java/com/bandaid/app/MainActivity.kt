@@ -1,10 +1,12 @@
 package com.bandaid.app
 
 import android.os.Bundle
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bandaid.app.databinding.ActivityMainBinding
+import com.bandaid.app.ui.medicine.MedicineDetailActivity
 import com.bandaid.app.ui.main.MainUiState
 import com.bandaid.app.ui.main.MainViewModel
 import com.bandaid.app.ui.main.MedicineListAdapter
@@ -20,7 +22,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = MedicineListAdapter()
+        adapter = MedicineListAdapter { medicine ->
+            val intent = Intent(this, MedicineDetailActivity::class.java)
+            intent.putExtra(MedicineDetailActivity.EXTRA_MEDICINE_ID, medicine.id)
+            startActivity(intent)
+        }
         binding.recyclerMedicines.layoutManager = LinearLayoutManager(this)
         binding.recyclerMedicines.adapter = adapter
 

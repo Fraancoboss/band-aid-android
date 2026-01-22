@@ -6,7 +6,8 @@ import com.bandaid.app.databinding.ItemMedicineBinding
 import com.bandaid.app.domain.model.Medicine
 
 class MedicineViewHolder(
-    private val binding: ItemMedicineBinding
+    private val binding: ItemMedicineBinding,
+    private val onItemClick: (Medicine) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Medicine) {
@@ -20,5 +21,6 @@ class MedicineViewHolder(
             R.string.medicine_instructions_format,
             item.instructions
         )
+        binding.root.setOnClickListener { onItemClick(item) }
     }
 }
