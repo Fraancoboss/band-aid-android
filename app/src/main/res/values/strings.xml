@@ -27,4 +27,8 @@
     <string name="calendar_status_taken">Tomada</string>
     <string name="medicine_unknown">Medicamento desconocido</string>
     <string name="button_open_calendar">Ver calendario</string>
+    <string name="calendar_prev_day">Dia anterior</string>
+    <string name="calendar_next_day">Dia siguiente</string>
+    <string name="calendar_selected_date_format">Fecha: %1$s</string>
+    <string name="calendar_selected_date_placeholder">Fecha: --</string>
 </resources>

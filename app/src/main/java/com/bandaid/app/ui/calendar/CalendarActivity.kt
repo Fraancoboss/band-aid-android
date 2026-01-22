@@ -27,6 +27,7 @@ import com.bandaid.app.domain.model.DoseLog
 import com.bandaid.app.domain.repository.CalendarEntryRepository
 import com.bandaid.app.domain.repository.DoseLogRepository
 import com.bandaid.app.domain.repository.MedicineRepository
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -34,6 +35,7 @@ import java.util.Locale
 class CalendarActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCalendarBinding
+    private var selectedDate: LocalDate = LocalDate.now()
 
     private val calendarEntryRepository: CalendarEntryRepository
         get() = (application as BandAidApplication).appContainer.calendarEntryRepository
@@ -48,6 +50,10 @@ class CalendarActivity : AppCompatActivity() {
         "yyyy-MM-dd HH:mm",
         Locale.getDefault()
     )
+    private val dateFormatter = DateTimeFormatter.ofPattern(
+        "yyyy-MM-dd",
+        Locale.getDefault()
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,11 +65,39 @@ class CalendarActivity : AppCompatActivity() {
         //
         // POR QUE ESTA DECISION:
         // El calendario de v0.1 es intencionalmente pasivo y de solo lectura.
+        setupDateControls()
         renderCalendarEntries()
+    }
+
+    private fun setupDateControls() {
+        // WHY THIS DECISION:
+        // A simple previous/next day selector avoids new dependencies in v0.1.x.
+        //
+        // POR QUE ESTA DECISION:
+        // Un selector basico de dia evita dependencias nuevas en v0.1.x.
+        updateSelectedDateLabel()
+        binding.buttonPrevDay.setOnClickListener {
+            selectedDate = selectedDate.minusDays(1)
+            updateSelectedDateLabel()
+            renderCalendarEntries()
+        }
+        binding.buttonNextDay.setOnClickListener {
+            selectedDate = selectedDate.plusDays(1)
+            updateSelectedDateLabel()
+            renderCalendarEntries()
+        }
+    }
+
+    private fun updateSelectedDateLabel() {
+        binding.textSelectedDate.text = getString(
+            R.string.calendar_selected_date_format,
+            selectedDate.format(dateFormatter)
+        )
     }
 
     private fun renderCalendarEntries() {
         val entries = calendarEntryRepository.getAll()
+            .filter { it.expectedAt.toLocalDate() == selectedDate }
             .sortedBy { it.expectedAt }
         val doseLogs = doseLogRepository.getAll()
 

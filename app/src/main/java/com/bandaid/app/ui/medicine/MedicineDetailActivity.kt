@@ -23,6 +23,7 @@ import com.bandaid.app.R
 import com.bandaid.app.databinding.ActivityMedicineDetailBinding
 import com.bandaid.app.databinding.ItemDoseLogBinding
 import com.bandaid.app.domain.model.DoseLog
+import com.bandaid.app.domain.repository.CalendarEntryRepository
 import com.bandaid.app.domain.repository.DoseLogRepository
 import com.bandaid.app.domain.repository.MedicineRepository
 import java.time.format.DateTimeFormatter
@@ -44,6 +45,9 @@ class MedicineDetailActivity : AppCompatActivity() {
 
     private val doseLogRepository: DoseLogRepository
         get() = (application as BandAidApplication).appContainer.doseLogRepository
+
+    private val calendarEntryRepository: CalendarEntryRepository
+        get() = (application as BandAidApplication).appContainer.calendarEntryRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,17 +118,41 @@ class MedicineDetailActivity : AppCompatActivity() {
         //
         // POR QUE ESTA DECISION:
         // La generacion manual de ID/tiempo mantiene el flujo local sin persistencia.
+        val takenAt = LocalDateTime.now()
+        val scheduledTime = resolveScheduledTime(takenAt)
         val doseLog = DoseLog(
             id = UUID.randomUUID().toString(),
             medicineId = medicineId,
-            scheduledTime = null,
-            takenAt = LocalDateTime.now(),
+            scheduledTime = scheduledTime,
+            takenAt = takenAt,
             status = "taken",
             notes = null
         )
         doseLogRepository.upsert(doseLog)
         binding.textFeedback.text = getString(R.string.dose_log_registered)
         renderDoseLogs()
+    }
+
+    private fun resolveScheduledTime(takenAt: LocalDateTime): LocalDateTime? {
+        // WHY THIS DECISION:
+        // Select the closest CalendarEntry at or before the manual takenAt time.
+        //
+        // POR QUE ESTA DECISION:
+        // Se selecciona el CalendarEntry mas cercano en el tiempo, igual o anterior a takenAt.
+        val entries = calendarEntryRepository.getAll()
+            .filter { it.medicineId == medicineId }
+            .filter { it.expectedAt <= takenAt }
+
+        // WHY THIS DECISION:
+        // If no matching entry exists, keep scheduledTime null to avoid creating entries.
+        //
+        // POR QUE ESTA DECISION:
+        // Si no hay coincidencia, se mantiene scheduledTime null y no se crean entradas.
+        if (entries.isEmpty()) {
+            return null
+        }
+
+        return entries.maxBy { it.expectedAt }.expectedAt
     }
 
     private fun renderDoseLogs() {

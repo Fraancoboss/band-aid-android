@@ -12,6 +12,35 @@
         android:text="@string/calendar_title"
         android:textSize="20sp" />
 
+    <LinearLayout
+        android:id="@+id/layoutDateControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonPrevDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/calendar_prev_day" />
+
+        <TextView
+            android:id="@+id/textSelectedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/calendar_selected_date_placeholder"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/buttonNextDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/calendar_next_day" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/textCalendarEmpty"
         android:layout_width="wrap_content"
