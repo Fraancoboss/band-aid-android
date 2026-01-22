@@ -18,4 +18,13 @@
     <string name="dose_logs_empty">No hay tomas registradas.</string>
     <string name="dose_log_item_format">Toma: %1$s</string>
     <string name="empty_text"></string>
+    <string name="calendar_title">Calendario</string>
+    <string name="calendar_empty">No hay entradas de calendario.</string>
+    <string name="calendar_medicine_format">Medicamento: %1$s</string>
+    <string name="calendar_expected_at_format">Esperada: %1$s</string>
+    <string name="calendar_status_format">Estado: %1$s</string>
+    <string name="calendar_status_pending">Pendiente</string>
+    <string name="calendar_status_taken">Tomada</string>
+    <string name="medicine_unknown">Medicamento desconocido</string>
+    <string name="button_open_calendar">Ver calendario</string>
 </resources>

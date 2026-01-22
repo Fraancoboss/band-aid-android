@@ -15,6 +15,7 @@
         </activity>
 
         <activity android:name=".ui.medicine.MedicineDetailActivity" />
+        <activity android:name=".ui.calendar.CalendarActivity" />
 
     </application>
 </manifest>

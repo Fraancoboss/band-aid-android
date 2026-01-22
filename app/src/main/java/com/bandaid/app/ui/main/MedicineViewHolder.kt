@@ -1,3 +1,18 @@
+/*
+ * Responsibility:
+ * - Binds a Medicine to the list item view.
+ * - Formats strings using resources only.
+ * - Does NOT handle navigation or state changes.
+ * Layer: UI (view holder).
+ * Scope: stable for v0.1.
+ *
+ * Responsabilidad:
+ * - Vincula un Medicine al item de la lista.
+ * - Formatea textos usando solo recursos.
+ * - NO maneja navegacion ni cambios de estado.
+ * Capa: UI (view holder).
+ * Alcance: estable para v0.1.
+ */
 package com.bandaid.app.ui.main
 
 import androidx.recyclerview.widget.RecyclerView

@@ -1,3 +1,18 @@
+/*
+ * Responsibility:
+ * - Displays read-only medicine details and allows manual dose logging.
+ * - Reads/writes in-memory repositories via AppContainer.
+ * - Does NOT edit medicines, schedule reminders, or persist data.
+ * Layer: UI (Activity).
+ * Scope: demo-only for v0.1.
+ *
+ * Responsabilidad:
+ * - Muestra detalle de medicina en solo lectura y permite registrar una toma manual.
+ * - Lee/escribe repositorios in-memory via AppContainer.
+ * - NO edita medicinas, agenda recordatorios ni persiste datos.
+ * Capa: UI (Activity).
+ * Alcance: demo para v0.1.
+ */
 package com.bandaid.app.ui.medicine
 
 import android.os.Bundle
@@ -42,6 +57,11 @@ class MedicineDetailActivity : AppCompatActivity() {
         }
         medicineId = extraId
 
+        // WHY THIS DECISION:
+        // Direct repository access avoids introducing a ViewModel for a simple v0.1 screen.
+        //
+        // POR QUE ESTA DECISION:
+        // Acceso directo evita un ViewModel en una pantalla simple de v0.1.
         val medicine = medicineRepository.getById(medicineId)
 
         if (medicine == null) {
@@ -89,6 +109,11 @@ class MedicineDetailActivity : AppCompatActivity() {
     }
 
     private fun registerDose() {
+        // WHY THIS DECISION:
+        // Manual ID/time generation keeps the flow local-only without persistence.
+        //
+        // POR QUE ESTA DECISION:
+        // La generacion manual de ID/tiempo mantiene el flujo local sin persistencia.
         val doseLog = DoseLog(
             id = UUID.randomUUID().toString(),
             medicineId = medicineId,
@@ -116,6 +141,11 @@ class MedicineDetailActivity : AppCompatActivity() {
 
         binding.textDoseLogsEmpty.visibility = View.GONE
         binding.layoutDoseLogs.visibility = View.VISIBLE
+        // WHY THIS DECISION:
+        // A simple LinearLayout list avoids RecyclerView overhead for a small v0.1 list.
+        //
+        // POR QUE ESTA DECISION:
+        // Una lista simple evita RecyclerView en una lista pequena de v0.1.
         logs.forEach { log ->
             val itemBinding = ItemDoseLogBinding.inflate(
                 layoutInflater,

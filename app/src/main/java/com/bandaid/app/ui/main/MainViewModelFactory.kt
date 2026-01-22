@@ -1,3 +1,18 @@
+/*
+ * Responsibility:
+ * - Simple factory to build MainViewModel with explicit dependencies.
+ * - Avoids framework DI while keeping Activity clean.
+ * - Does NOT add lifecycle logic beyond ViewModel creation.
+ * Layer: UI (wiring).
+ * Scope: stable for v0.1.
+ *
+ * Responsabilidad:
+ * - Factory simple para crear MainViewModel con dependencias explicitas.
+ * - Evita frameworks DI y mantiene la Activity limpia.
+ * - NO agrega logica de ciclo de vida mas alla de crear el ViewModel.
+ * Capa: UI (wiring).
+ * Alcance: estable para v0.1.
+ */
 package com.bandaid.app.ui.main
 
 import androidx.lifecycle.ViewModel

@@ -1,3 +1,18 @@
+/*
+ * Responsibility:
+ * - RecyclerView adapter for read-only medicine list.
+ * - Emits item click callbacks to the Activity.
+ * - Does NOT mutate data or perform formatting beyond binding.
+ * Layer: UI (adapter).
+ * Scope: stable for v0.1.
+ *
+ * Responsabilidad:
+ * - Adapter de RecyclerView para lista de medicinas en solo lectura.
+ * - Emite callbacks de click hacia la Activity.
+ * - NO modifica datos ni hace formato mas alla del binding.
+ * Capa: UI (adapter).
+ * Alcance: estable para v0.1.
+ */
 package com.bandaid.app.ui.main
 
 import android.view.LayoutInflater

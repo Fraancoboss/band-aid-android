@@ -1,3 +1,18 @@
+/*
+ * Responsibility:
+ * - In-memory store for DoseLog entities.
+ * - Provides minimal CRUD without persistence or threading.
+ * - Does NOT deduplicate or enforce associations.
+ * Layer: data (local, in-memory).
+ * Scope: demo-only for v0.1.
+ *
+ * Responsabilidad:
+ * - Almacen in-memory para entidades DoseLog.
+ * - Provee CRUD minimo sin persistencia ni hilos.
+ * - NO deduplica ni aplica asociaciones.
+ * Capa: data (local, in-memory).
+ * Alcance: demo para v0.1.
+ */
 package com.bandaid.app.data.local
 
 import com.bandaid.app.domain.model.DoseLog
