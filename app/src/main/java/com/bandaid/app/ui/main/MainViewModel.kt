@@ -18,12 +18,16 @@ package com.bandaid.app.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bandaid.app.domain.model.CalendarEntry
 import com.bandaid.app.domain.model.Medicine
+import com.bandaid.app.domain.repository.CalendarEntryRepository
 import com.bandaid.app.domain.repository.MedicineRepository
+import java.time.LocalDateTime
 import java.util.UUID
 
 class MainViewModel(
-    private val medicineRepository: MedicineRepository
+    private val medicineRepository: MedicineRepository,
+    private val calendarEntryRepository: CalendarEntryRepository
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<MainUiState>(MainUiState.Loading)
@@ -61,6 +65,29 @@ class MainViewModel(
             isActive = true
         )
         medicineRepository.upsert(demo)
+        // WHY THIS DECISION:
+        // CalendarEntry demo data is generated here to keep Activity UI simple.
+        // Dates are explicit and deterministic for a local-only v0.1.x flow.
+        //
+        // POR QUE ESTA DECISION:
+        // Los CalendarEntry demo se generan aqui para mantener la UI simple.
+        // Las fechas son explicitas y deterministas para v0.1.x local.
+        val now = LocalDateTime.now()
+        val demoEntries = listOf(1L, 2L, 3L).map { offsetDays ->
+            CalendarEntry(
+                id = UUID.randomUUID().toString(),
+                medicineId = demo.id,
+                // WHY THIS DECISION:
+                // DoseSchedule is intentionally not used in v0.1.x; this is a placeholder ID only.
+                //
+                // POR QUE ESTA DECISION:
+                // No se usa DoseSchedule en v0.1.x; este ID es solo un placeholder.
+                scheduleId = "demo",
+                expectedAt = now.plusDays(offsetDays),
+                isCompleted = false
+            )
+        }
+        demoEntries.forEach { calendarEntryRepository.upsert(it) }
         load()
     }
 }

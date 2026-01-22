@@ -35,9 +35,11 @@ class AppContainer {
 
     // WHY THIS DECISION:
     // ViewModel factory is created here to avoid creating repositories inside Activities.
+    // It also keeps demo-only CalendarEntry generation in the ViewModel.
     //
     // POR QUE ESTA DECISION:
     // El factory de ViewModel se crea aqui para evitar instancias en Activities.
+    // Tambien mantiene la generacion demo de CalendarEntry en el ViewModel.
     val mainViewModelFactory: MainViewModelFactory =
-        MainViewModelFactory(medicineRepository)
+        MainViewModelFactory(medicineRepository, calendarEntryRepository)
 }

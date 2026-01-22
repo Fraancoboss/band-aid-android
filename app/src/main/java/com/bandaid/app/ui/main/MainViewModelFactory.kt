@@ -17,16 +17,21 @@ package com.bandaid.app.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bandaid.app.domain.repository.CalendarEntryRepository
 import com.bandaid.app.domain.repository.MedicineRepository
 
 class MainViewModelFactory(
-    private val medicineRepository: MedicineRepository
+    private val medicineRepository: MedicineRepository,
+    private val calendarEntryRepository: CalendarEntryRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MainViewModel(medicineRepository) as T
+            return MainViewModel(
+                medicineRepository,
+                calendarEntryRepository
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
