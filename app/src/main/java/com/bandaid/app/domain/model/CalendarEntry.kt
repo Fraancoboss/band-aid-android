@@ -26,3 +26,4 @@ data class CalendarEntry(
     val expectedAt: LocalDateTime,
     val isCompleted: Boolean
 )
+ 
