@@ -238,7 +238,7 @@ if (age == null || age !in 1..150) {
 }
 ```
 
-## 11. Decisiones técnicas que puedes defender
+## 11. Decisiones técnicas
 
 Estas decisiones están alineadas con el alcance académico de v0.1.x.
 
@@ -250,8 +250,6 @@ Estas decisiones están alineadas con el alcance académico de v0.1.x.
 
 ## 12. Limitaciones actuales (importante decirlo)
 
-Decir esto en clase suma porque muestra criterio técnico.
-
 - Los datos no sobreviven al cierre de la app.
 - No hay notificaciones automáticas.
 - No hay ejecución en segundo plano.
@@ -260,35 +258,10 @@ Decir esto en clase suma porque muestra criterio técnico.
 
 ## 13. Mejoras futuras naturales
 
-Si te preguntan "¿siguiente versión?", esta es una ruta clara.
-
 - Persistencia local con Room.
 - Alarmas/notificaciones con WorkManager/AlarmManager.
 - Fuente real de medicamentos (API externa controlada).
 - Tests unitarios de ViewModel y repositorios.
 - Migrar a navegación con fragments o Compose en una fase posterior.
 
-## 14. Guion rápido para exponer en 5 minutos
-
-Puedes usar este orden tal cual.
-
-1. Explica objetivo de la app en 20 segundos.
-2. Muestra stack y dependencias reales en 40 segundos.
-3. Enseña arquitectura por capas con el diagrama en 60 segundos.
-4. Enseña flujo funcional de usuario con el flowchart en 60 segundos.
-5. Enseña un flujo técnico (crear medicamento o registrar toma) en 60 segundos.
-6. Cierra con limitaciones y mejoras futuras en 40 segundos.
-
-## 15. Preguntas típicas y respuesta corta
-
-- ¿Por qué no usaste base de datos?
-  Porque v0.1 prioriza validar flujo de negocio/UI; la persistencia se deja
-  para la siguiente iteración.
-- ¿Cómo desacoplaste capas?
-  Con interfaces de repositorio en `domain` e implementaciones `InMemory`
-  en `data/local`.
-- ¿Cómo inyectas dependencias?
-  Con `AppContainer` manual para evitar complejidad de framework DI.
-- ¿Cómo se reflejan cambios en UI?
-  Con `LiveData` desde ViewModels observados por Activities.
 
