@@ -10,6 +10,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+/*
+ * Responsabilidad:
+ * - Prepara el estado del calendario diario para la UI.
+ * - Cruza CalendarEntry + DoseLog para marcar pendiente/tomada.
+ * - Gestiona navegacion de fechas (anterior/siguiente/hoy).
+ *
+ * Capa: UI (ViewModel).
+ * Alcance: lectura y transformacion de datos para v0.1.x.
+ */
 class CalendarViewModel(
     private val calendarEntryRepository: CalendarEntryRepository,
     private val doseLogRepository: DoseLogRepository,
@@ -73,12 +82,22 @@ class CalendarViewModel(
     }
 }
 
+/*
+ * Estado de pantalla para CalendarActivity.
+ * Loading: carga inicial.
+ * Empty: no hay entradas para la fecha seleccionada.
+ * Content: hay entradas renderizables.
+ */
 sealed class CalendarUiState {
     object Loading : CalendarUiState()
     data class Empty(val date: LocalDate) : CalendarUiState()
     data class Content(val date: LocalDate, val entries: List<CalendarEntryUiModel>) : CalendarUiState()
 }
 
+/*
+ * Modelo de presentacion de una fila del calendario.
+ * Ya incluye datos listos para pintar en la vista.
+ */
 data class CalendarEntryUiModel(
     val entryId: String,
     val medicineId: String,

@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import com.bandaid.app.databinding.ItemMedicineBinding
 import com.bandaid.app.domain.model.Medicine
 
+/*
+ * Adapter de la lista principal de medicinas.
+ * Usa DiffUtil para actualizar solo filas cambiadas y mejorar rendimiento.
+ */
 class MedicineListAdapter(
     private val onItemClick: (Medicine) -> Unit
 ) : ListAdapter<Medicine, MedicineViewHolder>(MedicineDiffCallback()) {
@@ -22,6 +26,9 @@ class MedicineListAdapter(
     }
 }
 
+/*
+ * Compara identidad y contenido para calcular diffs de RecyclerView.
+ */
 private class MedicineDiffCallback : DiffUtil.ItemCallback<Medicine>() {
     override fun areItemsTheSame(oldItem: Medicine, newItem: Medicine): Boolean =
         oldItem.id == newItem.id

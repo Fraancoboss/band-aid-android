@@ -23,6 +23,6 @@ class BandAidApplication : Application() {
     // Lazy init avoids DI frameworks and guarantees a single container per app process.
     //
     // POR QUE ESTA DECISION:
-    // La inicializacion diferida evita frameworks DI y garantiza un solo container por proceso.
+    // La inicialización diferida evita frameworks DI y garantiza un solo container por proceso.
     val appContainer: AppContainer by lazy { AppContainer() }
 }

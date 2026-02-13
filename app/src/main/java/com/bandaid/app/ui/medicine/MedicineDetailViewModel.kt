@@ -14,6 +14,15 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.UUID
 
+/*
+ * Responsabilidad:
+ * - Orquesta el estado del detalle de medicina.
+ * - Gestiona acciones de usuario: registrar toma, activar/desactivar, eliminar.
+ * - Emite eventos de una sola vez para feedback de UI (Snackbar).
+ *
+ * Capa: UI (ViewModel).
+ * Alcance: flujo de detalle local para v0.1.x.
+ */
 class MedicineDetailViewModel(
     private val medicineRepository: MedicineRepository,
     private val doseLogRepository: DoseLogRepository,
@@ -101,6 +110,9 @@ class MedicineDetailViewModel(
         log.takenAt.format(doseLogFormatter)
 }
 
+/*
+ * Estado de pantalla para detalle de medicina.
+ */
 sealed class MedicineDetailUiState {
     object Loading : MedicineDetailUiState()
     object NotFound : MedicineDetailUiState()
@@ -108,18 +120,27 @@ sealed class MedicineDetailUiState {
     object Deleted : MedicineDetailUiState()
 }
 
+/*
+ * DTO de presentacion para pintar la vista de detalle.
+ */
 data class MedicineDetailUiModel(
     val medicine: Medicine,
     val duration: String?,
     val doseLogs: List<DoseLog>
 )
 
+/*
+ * Eventos puntuales de UI para mensajes al usuario.
+ */
 sealed class DetailEvent {
     object DoseRegistered : DetailEvent()
     object Deactivated : DetailEvent()
     object Activated : DetailEvent()
 }
 
+/*
+ * Wrapper simple para consumir un evento una sola vez.
+ */
 class SingleEvent<out T>(private val content: T) {
     private var hasBeenHandled = false
 

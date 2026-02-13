@@ -6,6 +6,10 @@ import com.bandaid.app.domain.repository.CalendarEntryRepository
 import com.bandaid.app.domain.repository.DoseLogRepository
 import com.bandaid.app.domain.repository.MedicineRepository
 
+/*
+ * Factory manual para construir CalendarViewModel con dependencias explicitas.
+ * Se usa para mantener la Activity desacoplada de detalles de creacion.
+ */
 class CalendarViewModelFactory(
     private val calendarEntryRepository: CalendarEntryRepository,
     private val doseLogRepository: DoseLogRepository,

@@ -7,6 +7,15 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 
+/*
+ * Responsabilidad:
+ * - Convierte una pauta (DoseSchedule) en entradas concretas de calendario.
+ * - Genera ocurrencias por fecha/hora segun frecuencia y rango.
+ * - Tambien elimina entradas ligadas a una pauta al reemplazarla.
+ *
+ * Capa: dominio (servicio de aplicacion).
+ * Alcance: logica local de generacion para v0.1.x.
+ */
 class CalendarEntryGenerator(
     private val calendarEntryRepository: CalendarEntryRepository
 ) {

@@ -17,6 +17,15 @@ import com.bandaid.app.ui.calendar.CalendarViewModelFactory
 import com.bandaid.app.ui.main.MainViewModelFactory
 import com.bandaid.app.ui.medicine.MedicineDetailViewModelFactory
 
+/*
+ * Responsabilidad:
+ * - Centraliza el wiring de dependencias de la app.
+ * - Expone repositorios in-memory, stores y factories de ViewModel.
+ * - Evita instanciacion manual en Activities.
+ *
+ * Capa: DI/Wiring.
+ * Alcance: v0.1.x local-only.
+ */
 class AppContainer {
     val medicineRepository: MedicineRepository = InMemoryMedicineRepository()
     val doseLogRepository: DoseLogRepository = InMemoryDoseLogRepository()

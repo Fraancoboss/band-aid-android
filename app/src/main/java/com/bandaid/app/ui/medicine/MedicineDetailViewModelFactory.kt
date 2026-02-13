@@ -7,6 +7,10 @@ import com.bandaid.app.domain.repository.CalendarEntryRepository
 import com.bandaid.app.domain.repository.DoseLogRepository
 import com.bandaid.app.domain.repository.MedicineRepository
 
+/*
+ * Factory manual para crear MedicineDetailViewModel con sus repositorios.
+ * Evita acoplar la Activity con la logica de construccion.
+ */
 class MedicineDetailViewModelFactory(
     private val medicineRepository: MedicineRepository,
     private val doseLogRepository: DoseLogRepository,
