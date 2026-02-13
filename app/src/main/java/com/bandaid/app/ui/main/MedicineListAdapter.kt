@@ -1,30 +1,15 @@
-/*
- * Responsibility:
- * - RecyclerView adapter for read-only medicine list.
- * - Emits item click callbacks to the Activity.
- * - Does NOT mutate data or perform formatting beyond binding.
- * Layer: UI (adapter).
- * Scope: stable for v0.1.
- *
- * Responsabilidad:
- * - Adapter de RecyclerView para lista de medicinas en solo lectura.
- * - Emite callbacks de click hacia la Activity.
- * - NO modifica datos ni hace formato mas alla del binding.
- * Capa: UI (adapter).
- * Alcance: estable para v0.1.
- */
 package com.bandaid.app.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.bandaid.app.databinding.ItemMedicineBinding
 import com.bandaid.app.domain.model.Medicine
 
 class MedicineListAdapter(
     private val onItemClick: (Medicine) -> Unit
-) : RecyclerView.Adapter<MedicineViewHolder>() {
-    private val items = mutableListOf<Medicine>()
+) : ListAdapter<Medicine, MedicineViewHolder>(MedicineDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -33,14 +18,14 @@ class MedicineListAdapter(
     }
 
     override fun onBindViewHolder(holder: MedicineViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
+}
 
-    override fun getItemCount(): Int = items.size
+private class MedicineDiffCallback : DiffUtil.ItemCallback<Medicine>() {
+    override fun areItemsTheSame(oldItem: Medicine, newItem: Medicine): Boolean =
+        oldItem.id == newItem.id
 
-    fun submitList(medicines: List<Medicine>) {
-        items.clear()
-        items.addAll(medicines)
-        notifyDataSetChanged()
-    }
+    override fun areContentsTheSame(oldItem: Medicine, newItem: Medicine): Boolean =
+        oldItem == newItem
 }

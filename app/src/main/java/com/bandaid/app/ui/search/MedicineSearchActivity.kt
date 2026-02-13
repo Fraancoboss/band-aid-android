@@ -20,14 +20,29 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bandaid.app.R
 import com.bandaid.app.databinding.ActivityMedicineSearchBinding
 import com.bandaid.app.databinding.ItemMedicineSuggestionBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MedicineSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMedicineSearchBinding
+    private val createLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val messageRes = result.data?.getIntExtra(
+                MedicineCreateActivity.EXTRA_RESULT_MESSAGE_RES,
+                0
+            ) ?: 0
+            if (messageRes != 0) {
+                Snackbar.make(binding.root, messageRes, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     // WHY THIS DECISION:
     // This is a local stub list; external databases (AEMPS/CIMA) are out of v0.1.x.
@@ -48,6 +63,8 @@ class MedicineSearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMedicineSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationOnClickListener { finish() }
 
         binding.textStubNote.text = getString(R.string.search_stub_note)
 
@@ -114,7 +131,7 @@ class MedicineSearchActivity : AppCompatActivity() {
         intent.putExtra(MedicineCreateActivity.EXTRA_NAME, suggestion.name)
         intent.putExtra(MedicineCreateActivity.EXTRA_DOSAGE, suggestion.dosage)
         intent.putExtra(MedicineCreateActivity.EXTRA_INSTRUCTIONS, suggestion.instructions)
-        startActivity(intent)
+        createLauncher.launch(intent)
     }
 
     private data class MedicineSuggestion(

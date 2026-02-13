@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary: Teal (healthcare) -->
+    <color name="primary">#00796B</color>
+    <color name="primary_variant">#004D40</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_container">#B2DFDB</color>
+    <color name="on_primary_container">#00251A</color>
+
+    <!-- Secondary: Blue-Grey -->
+    <color name="secondary">#546E7A</color>
+    <color name="secondary_variant">#29434E</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="secondary_container">#CFD8DC</color>
+    <color name="on_secondary_container">#1B2B31</color>
+
+    <!-- Tertiary: Amber -->
+    <color name="tertiary">#FFA000</color>
+    <color name="on_tertiary">#FFFFFF</color>
+    <color name="tertiary_container">#FFE082</color>
+    <color name="on_tertiary_container">#3E2700</color>
+
+    <!-- Error -->
+    <color name="error">#B00020</color>
+    <color name="on_error">#FFFFFF</color>
+    <color name="error_container">#FDECEA</color>
+    <color name="on_error_container">#410002</color>
+
+    <!-- Background / Surface -->
+    <color name="background">#FAFAFA</color>
+    <color name="on_background">#1C1B1F</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="on_surface">#1C1B1F</color>
+    <color name="surface_variant">#F5F5F5</color>
+    <color name="on_surface_variant">#49454F</color>
+    <color name="outline">#79747E</color>
+    <color name="outline_variant">#CAC4D0</color>
+
+    <!-- Status bar / Navigation bar -->
+    <color name="status_bar">#004D40</color>
+    <color name="navigation_bar">#FFFFFF</color>
+
+    <!-- Semantic: medicine status -->
+    <color name="status_taken">#4CAF50</color>
+    <color name="status_pending">#FFA000</color>
+    <color name="status_active">#00796B</color>
+    <color name="status_inactive">#9E9E9E</color>
+</resources>

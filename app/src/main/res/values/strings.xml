@@ -1,55 +1,119 @@
 <resources>
     <string name="app_name">Band-AId</string>
-    <string name="status_loading">Preparando datos...</string>
+
+    <!-- Main screen -->
+    <string name="status_loading">Preparando datos…</string>
     <string name="status_empty">No hay medicamentos.</string>
     <string name="status_content">Medicamentos activos: %1$d</string>
-    <string name="button_add_demo">Agregar ejemplo</string>
-    <string name="demo_medicine_name">Ejemplo de medicamento</string>
-    <string name="demo_medicine_dosage">1 tableta</string>
-    <string name="demo_medicine_instructions">Tomar con agua</string>
+    <string name="toolbar_title_main">Band-AId</string>
+    <string name="fab_add_medicine">Agregar medicamento</string>
+    <string name="empty_title">Sin medicamentos</string>
+    <string name="empty_subtitle">Agrega tu primer medicamento con el boton +</string>
+
+    <!-- Medicine formats -->
     <string name="medicine_dosage_format">Dosis: %1$s</string>
     <string name="medicine_instructions_format">Indicaciones: %1$s</string>
     <string name="medicine_status_format">Estado: %1$s</string>
     <string name="medicine_status_active">Activo</string>
     <string name="medicine_status_inactive">Inactivo</string>
     <string name="medicine_not_found">Medicamento no encontrado</string>
+    <string name="medicine_duration_format">Duracion: %1$s</string>
+    <string name="medicine_duration_unknown">No registrada</string>
+    <string name="medicine_unknown">Medicamento desconocido</string>
+    <string name="empty_text"></string>
+
+    <!-- Medicine detail toolbar -->
+    <string name="toolbar_title_detail">Detalle</string>
+
+    <!-- Actions -->
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_deactivate">Desactivar</string>
+    <string name="action_activate">Activar</string>
+    <string name="action_calendar">Calendario</string>
+    <string name="action_settings">Configuracion</string>
+
+    <!-- Dose registration -->
     <string name="button_register_dose">Registrar toma</string>
     <string name="dose_log_registered">Toma registrada.</string>
+    <string name="dose_logs_title">Historial de tomas</string>
     <string name="dose_logs_empty">No hay tomas registradas.</string>
     <string name="dose_log_item_format">Toma: %1$s</string>
-    <string name="empty_text"></string>
+
+    <!-- Confirmation dialogs -->
+    <string name="dialog_delete_title">Eliminar medicamento</string>
+    <string name="dialog_delete_message">Esta accion no se puede deshacer. ¿Deseas eliminar este medicamento?</string>
+    <string name="dialog_confirm">Confirmar</string>
+    <string name="dialog_cancel">Cancelar</string>
+
+    <!-- Snackbar messages -->
+    <string name="snackbar_medicine_created">Medicamento creado</string>
+    <string name="snackbar_medicine_updated">Medicamento actualizado</string>
+    <string name="snackbar_medicine_deleted">Medicamento eliminado</string>
+    <string name="snackbar_dose_registered">Toma registrada correctamente</string>
+    <string name="snackbar_profile_saved">Perfil guardado</string>
+    <string name="snackbar_medicine_deactivated">Medicamento desactivado</string>
+    <string name="snackbar_medicine_activated">Medicamento activado</string>
+
+    <!-- Validation errors -->
+    <string name="error_field_required">Campo obligatorio</string>
+    <string name="error_invalid_age">Edad debe ser entre 1 y 150</string>
+    <string name="error_invalid_weight">Peso debe ser mayor a 0</string>
+    <string name="error_invalid_height">Altura debe ser mayor a 0</string>
+
+    <!-- Calendar -->
     <string name="calendar_title">Calendario</string>
-    <string name="calendar_empty">No hay entradas de calendario.</string>
+    <string name="toolbar_title_calendar">Calendario</string>
+    <string name="calendar_empty">No hay entradas para este dia.</string>
+    <string name="calendar_empty_subtitle">Crea un medicamento con horario para ver entradas</string>
     <string name="calendar_medicine_format">Medicamento: %1$s</string>
     <string name="calendar_expected_at_format">Esperada: %1$s</string>
     <string name="calendar_status_format">Estado: %1$s</string>
     <string name="calendar_status_pending">Pendiente</string>
     <string name="calendar_status_taken">Tomada</string>
-    <string name="medicine_unknown">Medicamento desconocido</string>
-    <string name="button_open_calendar">Ver calendario</string>
-    <string name="calendar_prev_day">Dia anterior</string>
-    <string name="calendar_next_day">Dia siguiente</string>
-    <string name="calendar_selected_date_format">Fecha: %1$s</string>
+    <string name="calendar_prev_day">Anterior</string>
+    <string name="calendar_next_day">Siguiente</string>
+    <string name="calendar_today">Hoy</string>
+    <string name="calendar_selected_date_format">%1$s</string>
     <string name="calendar_selected_date_placeholder">Fecha: --</string>
+
+    <!-- Navigation -->
     <string name="button_settings">Configuracion</string>
     <string name="button_search_medicine">Buscar medicamentos</string>
     <string name="button_search_medicine_desc">Buscar medicamentos</string>
     <string name="avatar_desc">Avatar</string>
+
+    <!-- User setup -->
     <string name="user_setup_title">Configuracion de usuario</string>
+    <string name="toolbar_title_user_setup">Configuracion</string>
     <string name="user_setup_age">Edad</string>
-    <string name="user_setup_weight">Peso</string>
-    <string name="user_setup_height">Altura</string>
+    <string name="user_setup_weight">Peso (kg)</string>
+    <string name="user_setup_height">Altura (cm)</string>
     <string name="user_setup_sex">Sexo</string>
     <string name="user_setup_diseases">Enfermedades (opcional)</string>
     <string name="user_setup_save_continue">Guardar y continuar</string>
     <string name="user_default_name">Usuario</string>
-    <string name="search_title">Busqueda de medicamentos</string>
+    <string name="user_setup_age_label">Edad</string>
+    <string name="user_setup_weight_label">Peso (kg)</string>
+    <string name="user_setup_height_label">Altura (cm)</string>
+    <string name="user_setup_sex_label">Sexo</string>
+    <string name="user_setup_sex_note">Campo descriptivo, no medico</string>
+    <string name="user_setup_diseases_label">Enfermedades</string>
+
+    <!-- Search -->
+    <string name="search_title">Buscar medicamento</string>
+    <string name="toolbar_title_search">Buscar medicamento</string>
     <string name="search_label">Buscar</string>
     <string name="search_hint">Nombre del medicamento</string>
     <string name="search_empty">Sin resultados.</string>
     <string name="search_stub_note">Busqueda local (stub)</string>
     <string name="search_result_format">%1$s</string>
+
+    <!-- Create / Edit medicine -->
     <string name="create_medicine_title">Crear medicamento</string>
+    <string name="edit_medicine_title">Editar medicamento</string>
+    <string name="toolbar_title_create">Crear medicamento</string>
+    <string name="toolbar_title_edit">Editar medicamento</string>
     <string name="create_medicine_name">Nombre</string>
     <string name="create_medicine_name_label">Nombre</string>
     <string name="create_medicine_dosage">Dosis</string>
@@ -60,17 +124,18 @@
     <string name="create_medicine_prefill_note">Formulario pre-rellenado desde busqueda</string>
     <string name="create_medicine_duration_label">Duracion del tratamiento</string>
     <string name="create_medicine_duration_hint">Ej: 7 dias</string>
-    <string name="medicine_duration_format">Duracion del tratamiento: %1$s</string>
-    <string name="medicine_duration_unknown">No registrada</string>
-    <string name="user_setup_age_label">Edad</string>
-    <string name="user_setup_weight_label">Peso</string>
-    <string name="user_setup_height_label">Altura</string>
-    <string name="user_setup_sex_label">Sexo</string>
-    <string name="user_setup_sex_note">Campo descriptivo, no medico</string>
-    <string name="user_setup_diseases_label">Enfermedades</string>
+
+    <!-- Schedule fields -->
+    <string name="schedule_title">Horario de tomas</string>
+    <string name="schedule_frequency_label">Frecuencia (dias)</string>
+    <string name="schedule_frequency_hint">Ej: 1 (diario)</string>
+    <string name="schedule_add_time">Agregar hora</string>
+    <string name="schedule_times_label">Horas de toma</string>
+
+    <!-- Sex options (bug fix: Assembly -> Prefiero no decir) -->
     <string-array name="user_sex_options">
         <item>Hombre</item>
         <item>Mujer</item>
-        <item>Assembly</item>
+        <item>Prefiero no decir</item>
     </string-array>
 </resources>

@@ -19,6 +19,9 @@ package com.bandaid.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,17 +33,30 @@ import com.bandaid.app.ui.main.MainViewModel
 import com.bandaid.app.ui.main.MedicineListAdapter
 import com.bandaid.app.ui.search.MedicineSearchActivity
 import com.bandaid.app.ui.user.UserSetupActivity
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: MedicineListAdapter
+    private val settingsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            Snackbar.make(
+                binding.root,
+                R.string.snackbar_profile_saved,
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         val container = (application as BandAidApplication).appContainer
         val profile = container.userProfileStore.getProfile()
@@ -80,44 +96,53 @@ class MainActivity : AppCompatActivity() {
             container.mainViewModelFactory
         )[MainViewModel::class.java]
 
-        binding.buttonAddDemo.setOnClickListener {
-            viewModel.addDemoMedicine(
-                name = getString(R.string.demo_medicine_name),
-                dosage = getString(R.string.demo_medicine_dosage),
-                instructions = getString(R.string.demo_medicine_instructions)
-            )
-        }
-
-        binding.buttonOpenCalendar.setOnClickListener {
-            val intent = Intent(this, CalendarActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.buttonSearchMedicine.setOnClickListener {
+        binding.fabAddMedicine.setOnClickListener {
             val intent = Intent(this, MedicineSearchActivity::class.java)
             startActivity(intent)
         }
 
-        binding.buttonSettings.setOnClickListener {
-            val intent = Intent(this, UserSetupActivity::class.java)
-            intent.putExtra(UserSetupActivity.EXTRA_INITIAL_SETUP, false)
-            startActivity(intent)
-        }
-
         viewModel.uiState.observe(this) { state ->
-            val text = when (state) {
-                is MainUiState.Loading -> getString(R.string.status_loading)
-                is MainUiState.Empty -> getString(R.string.status_empty)
-                is MainUiState.Content -> getString(
-                    R.string.status_content,
-                    state.medicines.size
-                )
-            }
-            binding.textStatus.text = text
             when (state) {
-                is MainUiState.Content -> adapter.submitList(state.medicines)
-                else -> adapter.submitList(emptyList())
+                is MainUiState.Content -> {
+                    adapter.submitList(state.medicines)
+                    binding.layoutEmpty.visibility = android.view.View.GONE
+                    binding.recyclerMedicines.visibility = android.view.View.VISIBLE
+                }
+
+                else -> {
+                    adapter.submitList(emptyList())
+                    binding.layoutEmpty.visibility = android.view.View.VISIBLE
+                    binding.recyclerMedicines.visibility = android.view.View.GONE
+                }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.load()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_calendar -> {
+                startActivity(Intent(this, CalendarActivity::class.java))
+                true
+            }
+
+            R.id.action_settings -> {
+                val intent = Intent(this, UserSetupActivity::class.java)
+                intent.putExtra(UserSetupActivity.EXTRA_INITIAL_SETUP, false)
+                settingsLauncher.launch(intent)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

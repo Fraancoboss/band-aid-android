@@ -1,93 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/create_medicine_title"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textPrefillNote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/create_medicine_prefill_note"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/labelName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:labelFor="@id/inputName"
-        android:text="@string/create_medicine_name_label"
-        android:textSize="14sp" />
-
-    <EditText
-        android:id="@+id/inputName"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/create_medicine_name"
-        android:inputType="text" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/labelDosage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:labelFor="@id/inputDosage"
-        android:text="@string/create_medicine_dosage_label"
-        android:textSize="14sp" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.BandAId.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="@string/toolbar_title_create" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <EditText
-        android:id="@+id/inputDosage"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/create_medicine_dosage"
-        android:inputType="text" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/labelInstructions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:labelFor="@id/inputInstructions"
-        android:text="@string/create_medicine_instructions_label"
-        android:textSize="14sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/inputInstructions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/create_medicine_instructions"
-        android:inputType="textMultiLine" />
+            <TextView
+                android:id="@+id/textPrefillNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_medicine_prefill_note"
+                android:textAppearance="@style/TextAppearance.BandAId.Label"
+                android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/labelDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:labelFor="@id/inputDuration"
-        android:text="@string/create_medicine_duration_label"
-        android:textSize="14sp" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutName"
+                style="@style/Widget.BandAId.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/create_medicine_name_label">
 
-    <EditText
-        android:id="@+id/inputDuration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/create_medicine_duration_hint"
-        android:inputType="text" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/buttonSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/create_medicine_save" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutDosage"
+                style="@style/Widget.BandAId.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/create_medicine_dosage_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputDosage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutInstructions"
+                style="@style/Widget.BandAId.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/create_medicine_instructions_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputInstructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutDuration"
+                style="@style/Widget.BandAId.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/create_medicine_duration_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputDuration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Schedule section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/schedule_title"
+                android:textAppearance="@style/TextAppearance.BandAId.Title" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutFrequency"
+                style="@style/Widget.BandAId.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/schedule_frequency_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputFrequency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/schedule_times_label"
+                android:textAppearance="@style/TextAppearance.BandAId.Label" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupTimes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonAddTime"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/schedule_add_time" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSave"
+                style="@style/Widget.BandAId.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/create_medicine_save" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

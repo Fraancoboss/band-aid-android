@@ -1,80 +1,185 @@
 /*
  * Responsibility:
- * - Displays read-only medicine details and allows manual dose logging.
- * - Reads/writes in-memory repositories via AppContainer.
- * - Does NOT edit medicines, schedule reminders, or persist data.
+ * - Displays medicine detail and routes user actions through MedicineDetailViewModel.
+ * - Renders dose logs, activation state, and delete/edit actions.
+ * - Does NOT implement persistence or background work.
  * Layer: UI (Activity).
- * Scope: demo-only for v0.1.
- *
- * Responsabilidad:
- * - Muestra detalle de medicina en solo lectura y permite registrar una toma manual.
- * - Lee/escribe repositorios in-memory via AppContainer.
- * - NO edita medicinas, agenda recordatorios ni persiste datos.
- * Capa: UI (Activity).
- * Alcance: demo para v0.1.
+ * Scope: stable for v0.1.x.
  */
 package com.bandaid.app.ui.medicine
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bandaid.app.BandAidApplication
 import com.bandaid.app.R
 import com.bandaid.app.databinding.ActivityMedicineDetailBinding
 import com.bandaid.app.databinding.ItemDoseLogBinding
 import com.bandaid.app.domain.model.DoseLog
-import com.bandaid.app.domain.repository.CalendarEntryRepository
-import com.bandaid.app.domain.repository.DoseLogRepository
-import com.bandaid.app.domain.repository.MedicineRepository
-import java.time.format.DateTimeFormatter
-import java.time.LocalDateTime
-import java.util.Locale
-import java.util.UUID
+import com.bandaid.app.ui.search.MedicineCreateActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 
 class MedicineDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMedicineDetailBinding
-    private lateinit var medicineId: String
-    private val doseLogFormatter = DateTimeFormatter.ofPattern(
-        "yyyy-MM-dd HH:mm",
-        Locale.getDefault()
-    )
-
-    private val medicineRepository: MedicineRepository
-        get() = (application as BandAidApplication).appContainer.medicineRepository
-
-    private val doseLogRepository: DoseLogRepository
-        get() = (application as BandAidApplication).appContainer.doseLogRepository
-
-    private val calendarEntryRepository: CalendarEntryRepository
-        get() = (application as BandAidApplication).appContainer.calendarEntryRepository
-
-    private val medicineMetaStore
-        get() = (application as BandAidApplication).appContainer.medicineMetaStore
+    private lateinit var viewModel: MedicineDetailViewModel
+    private var medicineId: String? = null
+    private var currentIsActive: Boolean = false
+    private val editLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val messageRes = result.data?.getIntExtra(
+                MedicineCreateActivity.EXTRA_RESULT_MESSAGE_RES,
+                0
+            ) ?: 0
+            if (messageRes != 0) {
+                Snackbar.make(binding.root, messageRes, Snackbar.LENGTH_SHORT).show()
+            }
+            medicineId?.let { viewModel.loadMedicine(it) }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMedicineDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationOnClickListener { finish() }
 
-        val extraId = intent.getStringExtra(EXTRA_MEDICINE_ID)
-        if (extraId.isNullOrBlank()) {
+        val container = (application as BandAidApplication).appContainer
+        viewModel = ViewModelProvider(
+            this,
+            container.medicineDetailViewModelFactory
+        )[MedicineDetailViewModel::class.java]
+
+        observeViewModel()
+
+        medicineId = intent.getStringExtra(EXTRA_MEDICINE_ID)
+        if (medicineId.isNullOrBlank()) {
             showNotFound()
-            return
+        } else {
+            viewModel.loadMedicine(medicineId!!)
         }
-        medicineId = extraId
 
-        // WHY THIS DECISION:
-        // Direct repository access avoids introducing a ViewModel for a simple v0.1 screen.
-        //
-        // POR QUE ESTA DECISION:
-        // Acceso directo evita un ViewModel en una pantalla simple de v0.1.
-        val medicine = medicineRepository.getById(medicineId)
-
-        if (medicine == null) {
-            showNotFound()
-            return
+        binding.buttonRegisterDose.setOnClickListener {
+            viewModel.registerDose()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_medicine_detail, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val toggle = menu.findItem(R.id.action_toggle_active)
+        toggle?.setTitle(
+            if (currentIsActive) {
+                R.string.action_deactivate
+            } else {
+                R.string.action_activate
+            }
+        )
+        val hasMedicine = !medicineId.isNullOrBlank()
+        menu.findItem(R.id.action_edit)?.isVisible = hasMedicine
+        menu.findItem(R.id.action_toggle_active)?.isVisible = hasMedicine
+        menu.findItem(R.id.action_delete)?.isVisible = hasMedicine
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_edit -> {
+                openEdit()
+                true
+            }
+
+            R.id.action_toggle_active -> {
+                viewModel.toggleActive()
+                true
+            }
+
+            R.id.action_delete -> {
+                showDeleteConfirmation()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.uiState.observe(this) { state ->
+            when (state) {
+                is MedicineDetailUiState.Loading -> {
+                    binding.buttonRegisterDose.isEnabled = false
+                }
+
+                is MedicineDetailUiState.NotFound -> {
+                    showNotFound()
+                }
+
+                is MedicineDetailUiState.Content -> {
+                    renderContent(state.model)
+                }
+
+                is MedicineDetailUiState.Deleted -> {
+                    Snackbar.make(
+                        binding.root,
+                        R.string.snackbar_medicine_deleted,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    setResult(RESULT_OK)
+                    finish()
+                }
+            }
+        }
+
+        viewModel.event.observe(this) { wrapper ->
+            when (wrapper.getContentIfNotHandled()) {
+                is DetailEvent.DoseRegistered -> {
+                    Snackbar.make(
+                        binding.root,
+                        R.string.snackbar_dose_registered,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+
+                is DetailEvent.Deactivated -> {
+                    Snackbar.make(
+                        binding.root,
+                        R.string.snackbar_medicine_deactivated,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    invalidateOptionsMenu()
+                }
+
+                is DetailEvent.Activated -> {
+                    Snackbar.make(
+                        binding.root,
+                        R.string.snackbar_medicine_activated,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    invalidateOptionsMenu()
+                }
+
+                null -> Unit
+            }
+        }
+    }
+
+    private fun renderContent(model: MedicineDetailUiModel) {
+        val medicine = model.medicine
+        medicineId = medicine.id
+        currentIsActive = medicine.isActive
+        binding.buttonRegisterDose.isEnabled = true
 
         binding.textName.text = medicine.name
         binding.textDosage.text = getString(
@@ -94,85 +199,15 @@ class MedicineDetailActivity : AppCompatActivity() {
             R.string.medicine_status_format,
             statusText
         )
-        // WHY THIS DECISION:
-        // Duration is UI-only metadata and is not used for calendar logic.
-        //
-        // POR QUE ESTA DECISION:
-        // La duracion es metadato UI y no se usa para logica del calendario.
-        val duration = medicineMetaStore.getDuration(medicineId)
         binding.textDuration.text = getString(
             R.string.medicine_duration_format,
-            duration ?: getString(R.string.medicine_duration_unknown)
+            model.duration ?: getString(R.string.medicine_duration_unknown)
         )
-
-        renderDoseLogs()
-
-        binding.buttonRegisterDose.setOnClickListener {
-            registerDose()
-        }
+        renderDoseLogs(model.doseLogs)
+        invalidateOptionsMenu()
     }
 
-    private fun showNotFound() {
-        binding.textName.text = getString(R.string.medicine_not_found)
-        binding.textDosage.text = getString(R.string.empty_text)
-        binding.textInstructions.text = getString(R.string.empty_text)
-        binding.textStatus.text = getString(R.string.empty_text)
-        binding.textFeedback.text = getString(R.string.empty_text)
-        binding.textDoseLogsEmpty.text = getString(R.string.empty_text)
-        binding.textDoseLogsEmpty.visibility = View.GONE
-        binding.layoutDoseLogs.removeAllViews()
-        binding.layoutDoseLogs.visibility = View.GONE
-        binding.buttonRegisterDose.isEnabled = false
-    }
-
-    private fun registerDose() {
-        // WHY THIS DECISION:
-        // Manual ID/time generation keeps the flow local-only without persistence.
-        //
-        // POR QUE ESTA DECISION:
-        // La generacion manual de ID/tiempo mantiene el flujo local sin persistencia.
-        val takenAt = LocalDateTime.now()
-        val scheduledTime = resolveScheduledTime(takenAt)
-        val doseLog = DoseLog(
-            id = UUID.randomUUID().toString(),
-            medicineId = medicineId,
-            scheduledTime = scheduledTime,
-            takenAt = takenAt,
-            status = "taken",
-            notes = null
-        )
-        doseLogRepository.upsert(doseLog)
-        binding.textFeedback.text = getString(R.string.dose_log_registered)
-        renderDoseLogs()
-    }
-
-    private fun resolveScheduledTime(takenAt: LocalDateTime): LocalDateTime? {
-        // WHY THIS DECISION:
-        // Select the closest CalendarEntry at or before the manual takenAt time.
-        //
-        // POR QUE ESTA DECISION:
-        // Se selecciona el CalendarEntry mas cercano en el tiempo, igual o anterior a takenAt.
-        val entries = calendarEntryRepository.getAll()
-            .filter { it.medicineId == medicineId }
-            .filter { it.expectedAt <= takenAt }
-
-        // WHY THIS DECISION:
-        // If no matching entry exists, keep scheduledTime null to avoid creating entries.
-        //
-        // POR QUE ESTA DECISION:
-        // Si no hay coincidencia, se mantiene scheduledTime null y no se crean entradas.
-        if (entries.isEmpty()) {
-            return null
-        }
-
-        return entries.maxBy { it.expectedAt }.expectedAt
-    }
-
-    private fun renderDoseLogs() {
-        val logs = doseLogRepository.getAll()
-            .filter { it.medicineId == medicineId }
-            .sortedByDescending { it.takenAt }
-
+    private fun renderDoseLogs(logs: List<DoseLog>) {
         binding.layoutDoseLogs.removeAllViews()
         if (logs.isEmpty()) {
             binding.textDoseLogsEmpty.visibility = View.VISIBLE
@@ -182,24 +217,56 @@ class MedicineDetailActivity : AppCompatActivity() {
 
         binding.textDoseLogsEmpty.visibility = View.GONE
         binding.layoutDoseLogs.visibility = View.VISIBLE
-        // WHY THIS DECISION:
-        // A simple LinearLayout list avoids RecyclerView overhead for a small v0.1 list.
-        //
-        // POR QUE ESTA DECISION:
-        // Una lista simple evita RecyclerView en una lista pequena de v0.1.
         logs.forEach { log ->
             val itemBinding = ItemDoseLogBinding.inflate(
                 layoutInflater,
                 binding.layoutDoseLogs,
                 false
             )
-            val formatted = log.takenAt.format(doseLogFormatter)
             itemBinding.textDoseLog.text = getString(
                 R.string.dose_log_item_format,
-                formatted
+                viewModel.formatDoseLog(log)
             )
             binding.layoutDoseLogs.addView(itemBinding.root)
         }
+    }
+
+    private fun showNotFound() {
+        medicineId = null
+        currentIsActive = false
+        binding.textName.text = getString(R.string.medicine_not_found)
+        binding.textDosage.text = getString(R.string.empty_text)
+        binding.textInstructions.text = getString(R.string.empty_text)
+        binding.textStatus.text = getString(R.string.empty_text)
+        binding.textDuration.text = getString(R.string.empty_text)
+        binding.textDoseLogsEmpty.visibility = View.GONE
+        binding.layoutDoseLogs.removeAllViews()
+        binding.layoutDoseLogs.visibility = View.GONE
+        binding.buttonRegisterDose.isEnabled = false
+        invalidateOptionsMenu()
+    }
+
+    private fun showDeleteConfirmation() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(R.string.dialog_delete_message)
+            .setNegativeButton(R.string.dialog_cancel, null)
+            .setPositiveButton(R.string.dialog_confirm) { _, _ ->
+                viewModel.deleteMedicine()
+            }
+            .show()
+    }
+
+    private fun openEdit() {
+        val id = medicineId ?: return
+        val intent = Intent(this, MedicineCreateActivity::class.java)
+        intent.putExtra(MedicineCreateActivity.EXTRA_MEDICINE_ID, id)
+        editLauncher.launch(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        medicineId?.let { viewModel.loadMedicine(it) }
     }
 
     companion object {

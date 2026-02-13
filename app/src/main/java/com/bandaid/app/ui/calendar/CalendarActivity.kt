@@ -1,120 +1,70 @@
 /*
  * Responsibility:
- * - Passive, read-only calendar list of CalendarEntry items.
- * - Reads repositories directly via AppContainer without ViewModel.
- * - Does NOT create entries, schedule work, or allow edits.
+ * - Displays read-only calendar entries from CalendarViewModel.
+ * - Supports day navigation and empty/content rendering.
+ * - Does NOT modify schedules or persist data.
  * Layer: UI (Activity).
- * Scope: demo-only for v0.1.
- *
- * Responsabilidad:
- * - Lista pasiva y de solo lectura de CalendarEntry.
- * - Lee repositorios via AppContainer sin ViewModel.
- * - NO crea entradas, agenda trabajo ni permite edicion.
- * Capa: UI (Activity).
- * Alcance: demo para v0.1.
+ * Scope: stable for v0.1.x.
  */
 package com.bandaid.app.ui.calendar
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bandaid.app.BandAidApplication
 import com.bandaid.app.R
 import com.bandaid.app.databinding.ActivityCalendarBinding
 import com.bandaid.app.databinding.ItemCalendarEntryBinding
-import com.bandaid.app.domain.model.CalendarEntry
-import com.bandaid.app.domain.model.DoseLog
-import com.bandaid.app.domain.repository.CalendarEntryRepository
-import com.bandaid.app.domain.repository.DoseLogRepository
-import com.bandaid.app.domain.repository.MedicineRepository
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class CalendarActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCalendarBinding
-    private var selectedDate: LocalDate = LocalDate.now()
-
-    private val calendarEntryRepository: CalendarEntryRepository
-        get() = (application as BandAidApplication).appContainer.calendarEntryRepository
-
-    private val doseLogRepository: DoseLogRepository
-        get() = (application as BandAidApplication).appContainer.doseLogRepository
-
-    private val medicineRepository: MedicineRepository
-        get() = (application as BandAidApplication).appContainer.medicineRepository
-
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern(
-        "yyyy-MM-dd HH:mm",
-        Locale.getDefault()
-    )
-    private val dateFormatter = DateTimeFormatter.ofPattern(
-        "yyyy-MM-dd",
-        Locale.getDefault()
-    )
+    private lateinit var viewModel: CalendarViewModel
+    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationOnClickListener { finish() }
 
-        // WHY THIS DECISION:
-        // v0.1 calendar is intentionally passive and read-only.
-        //
-        // POR QUE ESTA DECISION:
-        // El calendario de v0.1 es intencionalmente pasivo y de solo lectura.
-        setupDateControls()
-        renderCalendarEntries()
-    }
+        val container = (application as BandAidApplication).appContainer
+        viewModel = ViewModelProvider(
+            this,
+            container.calendarViewModelFactory
+        )[CalendarViewModel::class.java]
 
-    private fun setupDateControls() {
-        // WHY THIS DECISION:
-        // A simple previous/next day selector avoids new dependencies in v0.1.x.
-        //
-        // POR QUE ESTA DECISION:
-        // Un selector basico de dia evita dependencias nuevas en v0.1.x.
-        updateSelectedDateLabel()
-        binding.buttonPrevDay.setOnClickListener {
-            selectedDate = selectedDate.minusDays(1)
-            updateSelectedDateLabel()
-            renderCalendarEntries()
-        }
-        binding.buttonNextDay.setOnClickListener {
-            selectedDate = selectedDate.plusDays(1)
-            updateSelectedDateLabel()
-            renderCalendarEntries()
+        binding.buttonPrevDay.setOnClickListener { viewModel.previousDay() }
+        binding.buttonNextDay.setOnClickListener { viewModel.nextDay() }
+        binding.buttonToday.setOnClickListener { viewModel.goToToday() }
+
+        viewModel.uiState.observe(this) { state ->
+            when (state) {
+                is CalendarUiState.Loading -> Unit
+                is CalendarUiState.Empty -> renderEmpty(state.date)
+                is CalendarUiState.Content -> renderContent(state.date, state.entries)
+            }
         }
     }
 
-    private fun updateSelectedDateLabel() {
-        binding.textSelectedDate.text = getString(
-            R.string.calendar_selected_date_format,
-            selectedDate.format(dateFormatter)
-        )
-    }
-
-    private fun renderCalendarEntries() {
-        val entries = calendarEntryRepository.getAll()
-            .filter { it.expectedAt.toLocalDate() == selectedDate }
-            .sortedBy { it.expectedAt }
-        val doseLogs = doseLogRepository.getAll()
-
+    private fun renderEmpty(date: LocalDate) {
+        updateSelectedDateLabel(date)
         binding.layoutCalendarEntries.removeAllViews()
-        // WHY THIS DECISION:
-        // v0.1 does not generate CalendarEntry automatically, so the list can be empty.
-        //
-        // POR QUE ESTA DECISION:
-        // v0.1 no genera CalendarEntry automaticamente, por eso la lista puede estar vacia.
-        if (entries.isEmpty()) {
-            binding.textCalendarEmpty.visibility = View.VISIBLE
-            binding.layoutCalendarEntries.visibility = View.GONE
-            return
-        }
+        binding.layoutCalendarEmpty.visibility = View.VISIBLE
+        binding.scrollEntries.visibility = View.GONE
+    }
 
-        binding.textCalendarEmpty.visibility = View.GONE
-        binding.layoutCalendarEntries.visibility = View.VISIBLE
+    private fun renderContent(date: LocalDate, entries: List<CalendarEntryUiModel>) {
+        updateSelectedDateLabel(date)
+        binding.layoutCalendarEntries.removeAllViews()
+        binding.layoutCalendarEmpty.visibility = View.GONE
+        binding.scrollEntries.visibility = View.VISIBLE
 
         entries.forEach { entry ->
             val itemBinding = ItemCalendarEntryBinding.inflate(
@@ -122,47 +72,37 @@ class CalendarActivity : AppCompatActivity() {
                 binding.layoutCalendarEntries,
                 false
             )
-            bindEntry(itemBinding, entry, doseLogs)
+            itemBinding.textMedicine.text = getString(
+                R.string.calendar_medicine_format,
+                entry.medicineName
+            )
+            itemBinding.textExpectedAt.text = getString(
+                R.string.calendar_expected_at_format,
+                entry.time
+            )
+            val statusText = if (entry.isTaken) {
+                getString(R.string.calendar_status_taken)
+            } else {
+                getString(R.string.calendar_status_pending)
+            }
+            itemBinding.textStatus.text = getString(
+                R.string.calendar_status_format,
+                statusText
+            )
+            val statusColor = if (entry.isTaken) {
+                ContextCompat.getColor(this, R.color.status_taken)
+            } else {
+                ContextCompat.getColor(this, R.color.status_pending)
+            }
+            itemBinding.viewStatusIndicator.setBackgroundColor(statusColor)
             binding.layoutCalendarEntries.addView(itemBinding.root)
         }
     }
 
-    private fun bindEntry(
-        itemBinding: ItemCalendarEntryBinding,
-        entry: CalendarEntry,
-        doseLogs: List<DoseLog>
-    ) {
-        val medicineName = medicineRepository.getById(entry.medicineId)?.name
-            ?: getString(R.string.medicine_unknown)
-        val formattedTime = entry.expectedAt.format(dateTimeFormatter)
-        // WHY THIS DECISION:
-        // v0.1 associates CalendarEntry to DoseLog using medicineId + scheduledTime only.
-        // Limitation: manual logs may have scheduledTime null and appear as pending here.
-        //
-        // POR QUE ESTA DECISION:
-        // v0.1 asocia CalendarEntry con DoseLog usando solo medicineId + scheduledTime.
-        // Limite: tomas manuales pueden tener scheduledTime null y verse como pendientes.
-        val isTaken = doseLogs.any {
-            it.medicineId == entry.medicineId &&
-                it.scheduledTime == entry.expectedAt
-        }
-        val statusText = if (isTaken) {
-            getString(R.string.calendar_status_taken)
-        } else {
-            getString(R.string.calendar_status_pending)
-        }
-
-        itemBinding.textMedicine.text = getString(
-            R.string.calendar_medicine_format,
-            medicineName
-        )
-        itemBinding.textExpectedAt.text = getString(
-            R.string.calendar_expected_at_format,
-            formattedTime
-        )
-        itemBinding.textStatus.text = getString(
-            R.string.calendar_status_format,
-            statusText
+    private fun updateSelectedDateLabel(date: LocalDate) {
+        binding.textSelectedDate.text = getString(
+            R.string.calendar_selected_date_format,
+            date.format(dateFormatter)
         )
     }
 }
